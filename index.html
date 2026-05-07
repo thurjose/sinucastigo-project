@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sinucastigo 🎱</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===========================
+       CSS VARIABLES — TEMA SINUCA
+       =========================== */
+    :root {
+      --bg-deep:      #0a0f0a;
+      --bg-card:      #111811;
+      --felt:         #0d2e14;
+      --felt-light:   #154a1e;
+      --green-neon:   #39ff6a;
+      --green-mid:    #22c45a;
+      --green-dim:    #145c2a;
+      --white:        #e8f5e9;
+      --grey:         #7a8c7e;
+      --danger:       #ff4444;
+      --gold:         #f5c518;
+      --radius:       12px;
+      --shadow:       0 4px 30px rgba(57, 255, 106, 0.08);
+    }
+
+    /* ===========================
+       RESET & BASE
+       =========================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Textura de feltro no fundo */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          rgba(21, 74, 30, 0.04) 0px,
+          rgba(21, 74, 30, 0.04) 1px,
+          transparent 1px,
+          transparent 8px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(21, 74, 30, 0.04) 0px,
+          rgba(21, 74, 30, 0.04) 1px,
+          transparent 1px,
+          transparent 8px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===========================
+       LAYOUT PRINCIPAL
+       =========================== */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    /* ===========================
+       HEADER
+       =========================== */
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .header-ball {
+      font-size: 3rem;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 10vw, 6rem);
+      letter-spacing: 4px;
+      line-height: 1;
+      color: var(--green-neon);
+      text-shadow:
+        0 0 20px rgba(57, 255, 106, 0.6),
+        0 0 60px rgba(57, 255, 106, 0.2);
+    }
+
+    .subtitle {
+      color: var(--grey);
+      font-size: 0.9rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
+    }
+
+    /* Separador estilo borda de mesa */
+    .divider {
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--green-dim), var(--green-neon), var(--green-dim), transparent);
+      border-radius: 2px;
+      margin: 1.5rem 0;
+    }
+
+    /* ===========================
+       GRID DE DOIS PAINÉIS
+       =========================== */
+    .panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .panels { grid-template-columns: 1fr; }
+    }
+
+    /* ===========================
+       CARD / PAINEL BASE
+       =========================== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--green-dim);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      color: var(--green-neon);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* ===========================
+       INPUT DE JOGADORES
+       =========================== */
+    .input-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .input-row input {
+      flex: 1;
+      background: var(--felt);
+      border: 1px solid var(--green-dim);
+      border-radius: 8px;
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.6rem 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-row input::placeholder { color: var(--grey); }
+
+    .input-row input:focus {
+      border-color: var(--green-neon);
+      box-shadow: 0 0 0 3px rgba(57, 255, 106, 0.15);
+    }
+
+    /* Botão pequeno de adicionar */
+    .btn-add {
+      background: var(--green-mid);
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      cursor: pointer;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      padding: 0.6rem 1rem;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-add:hover  { background: var(--green-neon); }
+    .btn-add:active { transform: scale(0.96); }
+
+    /* ===========================
+       LISTA DE JOGADORES
+       =========================== */
+    #player-list {
+      list-style: none;
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    /* Scrollbar estilizada */
+    #player-list::-webkit-scrollbar { width: 4px; }
+    #player-list::-webkit-scrollbar-track { background: transparent; }
+    #player-list::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 2px; }
+
+    /* Cada item de jogador */
+    .player-item {
+      background: var(--felt);
+      border: 1px solid var(--green-dim);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.9rem;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-15px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .player-name { font-weight: 600; }
+
+    /* Botão de remover jogador */
+    .btn-remove {
+      background: none;
+      border: none;
+      color: var(--grey);
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0 2px;
+      transition: color 0.15s;
+    }
+
+    .btn-remove:hover { color: var(--danger); }
+
+    /* ===========================
+       TABS DE CASTIGOS
+       =========================== */
+    .tabs {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .tab-btn {
+      background: none;
+      border: 1px solid var(--green-dim);
+      border-radius: 6px;
+      color: var(--grey);
+      cursor: pointer;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      padding: 0.3rem 0.75rem;
+      transition: all 0.15s;
+    }
+
+    .tab-btn.active {
+      background: var(--green-dim);
+      border-color: var(--green-neon);
+      color: var(--green-neon);
+    }
+
+    .tab-btn:hover:not(.active) {
+      border-color: var(--grey);
+      color: var(--white);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ===========================
+       TEXTAREA DE CASTIGO
+       =========================== */
+    .punishment-textarea {
+      width: 100%;
+      background: var(--felt);
+      border: 1px solid var(--green-dim);
+      border-radius: 8px;
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
+      padding: 0.6rem 0.9rem;
+      resize: vertical;
+      min-height: 70px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 0.5rem;
+    }
+
+    .punishment-textarea::placeholder { color: var(--grey); }
+
+    .punishment-textarea:focus {
+      border-color: var(--green-neon);
+      box-shadow: 0 0 0 3px rgba(57, 255, 106, 0.15);
+    }
+
+    /* Contador de castigos na aba */
+    .castigo-count-badge {
+      background: var(--green-dim);
+      border-radius: 4px;
+      color: var(--green-neon);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      margin-left: 4px;
+    }
+
+    /* Lista editável de castigos */
+    #castigo-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 4px;
+      margin-top: 0.75rem;
+    }
+
+    #castigo-list::-webkit-scrollbar { width: 4px; }
+    #castigo-list::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 2px; }
+
+    .castigo-item {
+      background: var(--felt);
+      border: 1px solid var(--green-dim);
+      border-radius: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.82rem;
+      animation: slideIn 0.3s ease;
+    }
+
+    .castigo-text {
+      flex: 1;
+      line-height: 1.4;
+      color: var(--white);
+      word-break: break-word;
+    }
+
+    /* Tag "padrão" nos castigos originais */
+    .tag-default {
+      background: var(--green-dim);
+      border-radius: 3px;
+      color: var(--green-neon);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 1px 5px;
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    /* Tag "custom" nos castigos adicionados pelo usuário */
+    .tag-custom {
+      background: rgba(245, 197, 24, 0.12);
+      border-radius: 3px;
+      color: var(--gold);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 1px 5px;
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    /* Mensagem quando lista está vazia */
+    .empty-msg {
+      color: var(--grey);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    /* ===========================
+       PAINEL DE CASTIGOS (preview)
+       =========================== */
+    .punishment-count {
+      font-size: 0.85rem;
+      color: var(--grey);
+      margin-bottom: 0.75rem;
+    }
+
+    .punishment-count span {
+      color: var(--green-neon);
+      font-weight: 700;
+    }
+
+    /* Mini-lista dos primeiros castigos como preview */
+    #punishment-preview {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    #punishment-preview::-webkit-scrollbar { width: 4px; }
+    #punishment-preview::-webkit-scrollbar-track { background: transparent; }
+    #punishment-preview::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 2px; }
+
+    .punishment-preview-item {
+      background: var(--felt);
+      border-left: 3px solid var(--green-dim);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      padding: 0.35rem 0.6rem;
+      color: var(--grey);
+    }
+
+    /* ===========================
+       BOTÃO PRINCIPAL DE SORTEAR
+       =========================== */
+    .btn-sortear {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-neon));
+      border: none;
+      border-radius: var(--radius);
+      color: #000;
+      cursor: pointer;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      letter-spacing: 4px;
+      padding: 1.1rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 0 30px rgba(57, 255, 106, 0.3);
+      margin-bottom: 2rem;
+    }
+
+    .btn-sortear::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    }
+
+    .btn-sortear:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px rgba(57, 255, 106, 0.5);
+    }
+
+    .btn-sortear:active { transform: scale(0.98); }
+
+    .btn-sortear:disabled {
+      background: var(--green-dim);
+      cursor: not-allowed;
+      box-shadow: none;
+      color: var(--grey);
+    }
+
+    /* ===========================
+       ÁREA DE RESULTADO
+       =========================== */
+    #result-area {
+      display: none; /* escondido até o primeiro sorteio */
+    }
+
+    #result-area.visible {
+      display: block;
+      animation: fadeUp 0.5s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-card {
+      background: var(--felt);
+      border: 2px solid var(--green-neon);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow:
+        0 0 40px rgba(57, 255, 106, 0.2),
+        inset 0 0 60px rgba(57, 255, 106, 0.03);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Brilho de canto */
+    .result-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(57,255,106,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .result-label {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Nome do jogador sorteado */
+    #result-player {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      color: var(--green-neon);
+      text-shadow: 0 0 30px rgba(57, 255, 106, 0.7);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      word-break: break-word;
+    }
+
+    .result-connector {
+      font-size: 0.85rem;
+      color: var(--grey);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin: 0.75rem 0;
+    }
+
+    /* Castigo sorteado */
+    #result-punishment {
+      font-size: clamp(1rem, 3vw, 1.35rem);
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.5;
+      text-shadow: 0 0 15px rgba(245, 197, 24, 0.4);
+    }
+
+    /* ===========================
+       ANIMAÇÃO DE SUSPENSE (roleta)
+       =========================== */
+    .spinning {
+      animation: pulse-glow 0.15s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse-glow {
+      from { text-shadow: 0 0 10px rgba(57, 255, 106, 0.3); }
+      to   { text-shadow: 0 0 40px rgba(57, 255, 106, 1), 0 0 80px rgba(57, 255, 106, 0.5); }
+    }
+
+    /* ===========================
+       HISTÓRICO
+       =========================== */
+    .history-section {
+      margin-top: 2rem;
+    }
+
+    .history-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      color: var(--grey);
+      margin-bottom: 0.75rem;
+    }
+
+    #history-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      max-height: 180px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    #history-list::-webkit-scrollbar { width: 4px; }
+    #history-list::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 2px; }
+
+    .history-item {
+      background: var(--bg-card);
+      border: 1px solid var(--green-dim);
+      border-radius: 8px;
+      font-size: 0.8rem;
+      padding: 0.45rem 0.75rem;
+      color: var(--grey);
+    }
+
+    .history-item strong { color: var(--white); }
+
+    /* ===========================
+       FOOTER
+       =========================== */
+    footer {
+      text-align: center;
+      color: var(--green-dim);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <!-- ======== HEADER ======== -->
+  <header>
+    <span class="header-ball">🎱</span>
+    <h1>SINUCASTIGO</h1>
+    <p class="subtitle">Sorte, humilhação & sofrimento</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- ======== PAINÉIS ======== -->
+  <div class="panels">
+
+    <!-- Painel: Jogadores -->
+    <div class="card">
+      <h2 class="card-title">🎮 Jogadores</h2>
+
+      <!-- Input para adicionar jogador -->
+      <div class="input-row">
+        <input
+          type="text"
+          id="player-input"
+          placeholder="Nome do jogador..."
+          maxlength="30"
+          autocomplete="off"
+        />
+        <button class="btn-add" id="btn-add">+ ADD</button>
+      </div>
+
+      <!-- Lista dinâmica de jogadores (manipulada pelo JS) -->
+      <ul id="player-list">
+        <li class="empty-msg" id="empty-players">Nenhum jogador ainda.</li>
+      </ul>
+    </div>
+
+    <!-- Painel: Castigos (gerenciamento) -->
+    <div class="card">
+      <h2 class="card-title">
+        💀 Castigos
+        <span class="castigo-count-badge" id="castigo-badge">0</span>
+      </h2>
+
+      <!-- Abas: Adicionar / Ver todos -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-add">+ Adicionar</button>
+        <button class="tab-btn" data-tab="tab-list">Ver todos</button>
+      </div>
+
+      <!-- Aba: Adicionar castigo -->
+      <div class="tab-panel active" id="tab-add">
+        <textarea
+          id="castigo-input"
+          class="punishment-textarea"
+          placeholder="Descreva o castigo aqui... (ex: Comer uma cebola crua sem fazer careta)"
+          maxlength="200"
+        ></textarea>
+        <div class="input-row" style="justify-content:flex-end">
+          <button class="btn-add" id="btn-add-castigo">+ ADD CASTIGO</button>
+        </div>
+      </div>
+
+      <!-- Aba: Lista de todos os castigos -->
+      <div class="tab-panel" id="tab-list">
+        <ul id="castigo-list"></ul>
+      </div>
+    </div>
+
+  </div><!-- /panels -->
+
+  <!-- ======== BOTÃO SORTEAR ======== -->
+  <button class="btn-sortear" id="btn-sortear" disabled>
+    🎱 SORTEAR CASTIGO
+  </button>
+
+  <!-- ======== RESULTADO ======== -->
+  <div id="result-area">
+    <div class="result-card">
+      <p class="result-label">⚠️ O sorteado é...</p>
+      <div id="result-player">—</div>
+      <p class="result-connector">tem que...</p>
+      <div id="result-punishment">—</div>
+    </div>
+
+    <!-- Histórico de sorteios -->
+    <div class="history-section">
+      <p class="history-title">📜 Histórico da sessão</p>
+      <ul id="history-list"></ul>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer>🎱 Sinucastigo &nbsp;•&nbsp; Jogue com responsabilidade</footer>
+
+<!-- ============================================================
+     JAVASCRIPT — BEM COMENTADO PARA FINS EDUCACIONAIS
+     ============================================================ -->
+<script>
+  /* ================================================================
+     BANCO DE CASTIGOS
+     ─────────────────
+     Os castigos padrão vêm aqui. Cada objeto tem:
+       { text: string, custom: boolean }
+     - custom: false → veio da lista original
+     - custom: true  → foi adicionado pelo usuário nessa sessão
+     ================================================================ */
+  const defaultPunishments = [
+    "Comer um pedaço de cebola crua sem fazer careta.",
+    "Beber um copo d'água com sal grosso, pimenta e limão — sem parar.",
+    "Mandar uma mensagem no grupo da família dizendo que tem um amor secreto na turma.",
+    "Ligar para o primeiro contato do histórico de chamadas e cantar 'Parabéns pra você' até o fim.",
+    "Fazer 15 agachamentos contando em voz alta imitando o sotaque baiano.",
+    "Postar nos stories um vídeo fazendo seu melhor rugido de leão por 10 segundos.",
+    "Comer uma colher de sopa de mostarda direto do vidro.",
+    "Dizer 'Eu amo muito o fulano [jogador à esquerda]' para toda a mesa, sem rir.",
+    "Sair na rua e cumprimentar a primeira pessoa que ver com uma reverência de samurai.",
+    "Tomar um shot de suco de limão concentrado sem fazer nenhum som.",
+    "Mudar a foto de perfil do WhatsApp para uma selfie com cara de choro por 2 horas.",
+    "Imitar um pombo andando pela sala por 30 segundos.",
+    "Comer uma colher de café solúbre puro, sem água.",
+    "Mandar uma mensagem aleatória para um chefe/professor dizendo 'oi sumido(a)!'.",
+    "Lambuzar a testa com catchup e ficar assim por 5 minutos.",
+    "Ligar o alto-falante do celular e tocar a música mais vergonhosa da sua biblioteca em público.",
+    "Beber água com vinagre de vinho (um dedo de copo).",
+    "Fazer uma declaração de amor em voz alta para a parede, como se fosse de verdade.",
+    "Enviar uma selfie feia (mais feia que conseguir) para o grupo do trabalho/faculdade.",
+    "Comer um cubo de gelo inteiro sem soltar da boca até derreter.",
+    "Contar um segredo envergonhoso em voz alta para o grupo.",
+    "Fazer uma dancinha de TikTok escolhida pelos outros jogadores.",
+    "Ficar de olhos fechados por 1 minuto enquanto os outros escrevem algo no seu braço com caneta.",
+    "Imitar o dono do estabelecimento mais próximo tentando vender algo.",
+    "Dizer 'com licença' para todos os objetos que tocar nos próximos 5 minutos.",
+  ];
+
+  // Array de trabalho — objetos com { text, custom }
+  let punishments = defaultPunishments.map(t => ({ text: t, custom: false }));
+
+  /* ================================================================
+     SELEÇÃO DE ELEMENTOS DO DOM
+     ================================================================ */
+  const playerInput     = document.getElementById('player-input');
+  const btnAdd          = document.getElementById('btn-add');
+  const playerListEl    = document.getElementById('player-list');
+  const btnSortear      = document.getElementById('btn-sortear');
+  const resultArea      = document.getElementById('result-area');
+  const resultPlayerEl  = document.getElementById('result-player');
+  const resultPunishEl  = document.getElementById('result-punishment');
+  const historyListEl   = document.getElementById('history-list');
+  const castigoBadge    = document.getElementById('castigo-badge');
+  const castigoInput    = document.getElementById('castigo-input');
+  const btnAddCastigo   = document.getElementById('btn-add-castigo');
+  const castigoListEl   = document.getElementById('castigo-list');
+
+  /* ================================================================
+     ESTADO DA APLICAÇÃO
+     ================================================================ */
+  let players = [];
+
+  /* ================================================================
+     INICIALIZAÇÃO
+     ================================================================ */
+  function init() {
+    renderCastigoList();
+    updateCastigoBadge();
+    setupTabs();
+  }
+
+  /* ================================================================
+     TABS — LÓGICA DE NAVEGAÇÃO
+     ─────────────────────────
+     Quando o usuário clica numa aba, remove .active de todas e
+     adiciona apenas na clicada, fazendo o mesmo com os painéis.
+     ================================================================ */
+  function setupTabs() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active de todos os botões e painéis
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+        // Ativa o botão clicado
+        btn.classList.add('active');
+
+        // Ativa o painel correspondente ao data-tab do botão
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+  }
+
+  /* ================================================================
+     ATUALIZAR BADGE DE CONTAGEM
+     ================================================================ */
+  function updateCastigoBadge() {
+    castigoBadge.textContent = punishments.length;
+  }
+
+  /* ================================================================
+     ADICIONAR CASTIGO
+     ─────────────────
+     Lê o textarea, valida e insere um novo objeto no array
+     `punishments` com custom: true.
+     ================================================================ */
+  function addCastigo() {
+    const text = castigoInput.value.trim();
+    if (!text) return;
+
+    // Verifica duplicata (comparação case-insensitive)
+    const duplicate = punishments.some(p => p.text.toLowerCase() === text.toLowerCase());
+    if (duplicate) {
+      castigoInput.style.borderColor = '#ff4444';
+      setTimeout(() => castigoInput.style.borderColor = '', 700);
+      return;
+    }
+
+    // Adiciona ao array com a flag custom: true
+    punishments.push({ text, custom: true });
+
+    // Limpa o textarea
+    castigoInput.value = '';
+
+    // Atualiza a UI
+    renderCastigoList();
+    updateCastigoBadge();
+
+    // Muda para a aba de lista para mostrar o novo castigo
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector('[data-tab="tab-list"]').classList.add('active');
+    document.getElementById('tab-list').classList.add('active');
+
+    castigoInput.focus();
+  }
+
+  /* ================================================================
+     REMOVER CASTIGO
+     ────────────────
+     Remove do array pelo index e re-renderiza.
+     ================================================================ */
+  function removeCastigo(index) {
+    punishments.splice(index, 1);
+    renderCastigoList();
+    updateCastigoBadge();
+  }
+
+  /* ================================================================
+     RENDERIZAR LISTA DE CASTIGOS
+     ─────────────────────────────
+     Constrói os <li> do painel "Ver todos", mostrando tag
+     diferente para castigos padrão vs. customizados.
+     ================================================================ */
+  function renderCastigoList() {
+    castigoListEl.innerHTML = '';
+
+    if (punishments.length === 0) {
+      const li = document.createElement('li');
+      li.className = 'empty-msg';
+      li.textContent = 'Nenhum castigo cadastrado.';
+      castigoListEl.appendChild(li);
+      return;
+    }
+
+    punishments.forEach((p, index) => {
+      const li = document.createElement('li');
+      li.className = 'castigo-item';
+
+      // Texto do castigo
+      const textSpan = document.createElement('span');
+      textSpan.className = 'castigo-text';
+      textSpan.textContent = p.text;
+
+      // Tag visual (padrão ou custom)
+      const tag = document.createElement('span');
+      tag.className = p.custom ? 'tag-custom' : 'tag-default';
+      tag.textContent = p.custom ? 'SEU' : 'PAD';
+
+      // Botão de remover
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'btn-remove';
+      removeBtn.textContent = '✕';
+      removeBtn.title = 'Remover castigo';
+      removeBtn.addEventListener('click', () => removeCastigo(index));
+
+      li.appendChild(textSpan);
+      li.appendChild(tag);
+      li.appendChild(removeBtn);
+      castigoListEl.appendChild(li);
+    });
+  }
+
+  /* ================================================================
+     ADICIONAR JOGADOR
+     ================================================================ */
+  function addPlayer() {
+    const name = playerInput.value.trim();
+    if (!name) return;
+    if (players.includes(name)) {
+      playerInput.style.borderColor = '#ff4444';
+      setTimeout(() => playerInput.style.borderColor = '', 600);
+      return;
+    }
+    players.push(name);
+    playerInput.value = '';
+    renderPlayerList();
+    updateSortearButton();
+    playerInput.focus();
+  }
+
+  function removePlayer(index) {
+    players.splice(index, 1);
+    renderPlayerList();
+    updateSortearButton();
+  }
+
+  function renderPlayerList() {
+    playerListEl.innerHTML = '';
+    if (players.length === 0) {
+      const li = document.createElement('li');
+      li.className = 'empty-msg';
+      li.textContent = 'Nenhum jogador ainda.';
+      playerListEl.appendChild(li);
+      return;
+    }
+    players.forEach((name, index) => {
+      const li = document.createElement('li');
+      li.className = 'player-item';
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'player-name';
+      nameSpan.textContent = `#${index + 1} ${name}`;
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'btn-remove';
+      removeBtn.textContent = '✕';
+      removeBtn.addEventListener('click', () => removePlayer(index));
+      li.appendChild(nameSpan);
+      li.appendChild(removeBtn);
+      playerListEl.appendChild(li);
+    });
+  }
+
+  function updateSortearButton() {
+    btnSortear.disabled = players.length === 0 || punishments.length === 0;
+  }
+
+  /* ================================================================
+     SORTEAR
+     ================================================================ */
+  function sortear() {
+    const playerIndex     = Math.floor(Math.random() * players.length);
+    const punishmentIndex = Math.floor(Math.random() * punishments.length);
+    animateSorteio(players[playerIndex], punishments[punishmentIndex].text);
+  }
+
+  function animateSorteio(finalPlayer, finalPunishment) {
+    btnSortear.disabled = true;
+    btnSortear.textContent = '🎰 Sorteando...';
+    resultArea.classList.add('visible');
+    resultPlayerEl.classList.add('spinning');
+    resultPunishEl.classList.add('spinning');
+
+    let ticks = 0;
+    const totalTicks = 20;
+
+    const interval = setInterval(() => {
+      resultPlayerEl.textContent = players[Math.floor(Math.random() * players.length)];
+      resultPunishEl.textContent = punishments[Math.floor(Math.random() * punishments.length)].text;
+      ticks++;
+      if (ticks >= totalTicks) {
+        clearInterval(interval);
+        revealResult(finalPlayer, finalPunishment);
+      }
+    }, 80);
+  }
+
+  function revealResult(player, punishment) {
+    resultPlayerEl.classList.remove('spinning');
+    resultPunishEl.classList.remove('spinning');
+    resultPlayerEl.textContent = player;
+    resultPunishEl.textContent = punishment;
+    btnSortear.disabled = false;
+    btnSortear.textContent = '🎱 SORTEAR CASTIGO';
+    addToHistory(player, punishment);
+  }
+
+  function addToHistory(player, punishment) {
+    const li = document.createElement('li');
+    li.className = 'history-item';
+    const time = new Date().toLocaleTimeString('pt-BR');
+    li.innerHTML = `<strong>${player}</strong> — ${punishment} <span style="float:right;opacity:.5;font-size:.75em">${time}</span>`;
+    historyListEl.insertBefore(li, historyListEl.firstChild);
+  }
+
+  /* ================================================================
+     EVENT LISTENERS
+     ================================================================ */
+  btnAdd.addEventListener('click', addPlayer);
+  playerInput.addEventListener('keydown', e => { if (e.key === 'Enter') addPlayer(); });
+  btnSortear.addEventListener('click', sortear);
+  btnAddCastigo.addEventListener('click', addCastigo);
+  castigoInput.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); addCastigo(); } });
+
+  init();
+</script>
+</body>
+</html>
